@@ -2,6 +2,10 @@
 
 Docker container: Red Hat Ubi 8.1 + Java 13 + Apache Tomcat 10.0.0-M1
 
+## Important Notes
+- I used kirillF's [centos-tomcat repo](https://github.com/kirillF/centos-tomcat) as my starting point and then altered it so it could run Apache Tomcat 10.0.0-M1 instead of 9.0.31. I wanted ot put this up near the top so it wouldn't get missed. Thanks KirillF for your awesome work that helped me figure this out. Playing with your container did a lot to help me learn more about containers.
+- Kept their *create-admin-user.sh* script because it rocks.
+
 ## Build the image
 
 ```sh
@@ -36,7 +40,3 @@ If you got error while build the docker image, please check the latest version o
 |Apache Tomcat|10.0.0-M1|[Tomcat Download Page](https://downloads.apache.org/tomcat/tomcat-10/v10.0.0-M1/)|
 
 [Docker Official Image for Tomcat](https://github.com/docker-library/tomcat) is also available.
-
-## Important Notes
-- I used kirillF's [centos-tomcat repo](https://github.com/kirillF/centos-tomcat) as my starting point and then altered it so it could run Apache Tomcat 10.0.0-M1 instead of 9.0.31.
-- Kept their *create-admin-user.sh* script because it rocks.
