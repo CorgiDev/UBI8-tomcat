@@ -37,22 +37,21 @@ RUN yum -y update && \
  yum -y install tar
 
  # Obtain and verify Java RPM before installing it
-RUN wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-    https://download.oracle.com/otn-pub/java/jdk/${JAVA_BUILD}/${JAVA_DL_HASH}/${JAVA_RPM} \
-    && echo ${JAVA_256_HASH} ${JAVA_RPM} && \
-    && yum -y localinstall jdk*
+RUN wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/${JAVA_BUILD}/${JAVA_DL_HASH}/${JAVA_RPM} && \
+    #echo "${JAVA_256_HASH} ${JAVA_RPM}" | sha256sum - c \
+    yum -y localinstall jdk* && \
+    rm ${JAVA_RPM}
 
 # Obtain and verify Apache Tomcat Tar file before installing it
-RUN wget https://downloads.apache.org/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/${TOMCAT_TARBALL} \
-    && echo ${TOMCAT_256_HASH} ${TOMCAT_TARBALL} \
-    | sha256 -c && \
+RUN wget https://downloads.apache.org/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/${TOMCAT_TARBALL} && \
+    #echo "${TOMCAT_256_HASH} ${TOMCAT_TARBALL}" | sha256sum -c \
     tar -xvf ${TOMCAT_TARBALL} && \
     rm apache-tomcat*.tar.gz && \
     mv apache-tomcat* ${CATALINA_HOME} && \
     chmod +x ${CATALINA_HOME}/bin/*sh
 
 # Create Apache Tomcat admin user using script
-COPY /scripts ${CATALINA_HOME}
+COPY /scripts ${CATALINA_HOME}/scripts
 # ADD create_admin_user.sh $CATALINA_HOME/scripts/create_admin_user.sh
 # ADD tomcat.sh $CATALINA_HOME/scripts/tomcat.sh
 RUN chmod +x $CATALINA_HOME/scripts/*.sh
@@ -68,5 +67,5 @@ EXPOSE 8080
 #EXPOSE 8009
 
 USER tomcat
-CMD ["tomcat.sh"]
-#CMD [ "/opt/tomcat/bin/catalina.sh", "run" ]
+#CMD ["tomcat.sh"]
+CMD [ "/opt/tomcat/bin/catalina.sh", "run" ]
