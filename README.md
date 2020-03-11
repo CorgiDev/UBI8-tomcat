@@ -1,33 +1,3 @@
-Docker container: CentOS 7 + Java 13 + Tomcat 9
+# Apache Tomcat
 
-## Build the image
-
-```sh
-git clone https://github.com/kirillF/centos-tomcat.git
-cd centos-tomcat
-docker build -t kirillf/centos-tomcat .
-```
-
-## How to use
-Put your war under the `/opt/tomcat/webapps` directory and run the following command.
-
-```sh
-docker run -v /opt/tomcat/webapps:/opt/tomcat/webapps -v /opt/tomcat/logs:/opt/tomcat/logs -p 8080:8080 -i -t --name centos-tomcat kirillf/centos-tomcat
-```
-
-Once you run it, you can start the container with `docker start centos-tomcat` in next time and log file will be under the `/opt/tomcat/logs` directory.
-
-Also, if you got some error, you can remove the container with `docker rm centos-tomcat`. Your current container list will be show with `docker ps -a`.
-
-For Mac user, you must share the directory `/opt/tomcat/webapps` and `/opt/tomcat/logs` on Docker > Preferences > File Sharing.
-
-## Versions
-If you got error while build the docker image, please check the latest version of Java and Tomcat.
-
-|Software|Version|Note|
-|:-----------|:------------|:------------|
-|CentOS|7||
-|Java|13.0.2[Java Release Note](https://www.oracle.com/technetwork/java/javase/12-0-2-relnotes-5480112.html)|
-|Apache Tomcat|9.0.31|[Tomcat Download Page](https://tomcat.apache.org/download-90.cgi)|
-
-[Docker Official Image for Tomcat](https://github.com/docker-library/tomcat) is also available.
+This repo contains versions of Apache Tomcat containers based on the Red Hat UBI 8 image. Each version folder will contain notes on that particular version.
