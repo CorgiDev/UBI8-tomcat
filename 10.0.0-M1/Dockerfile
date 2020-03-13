@@ -31,8 +31,8 @@ WORKDIR /opt/
 
 # Prep infrastructure and install JDK
 RUN yum -y update && \
- yum -y install wget && \
- yum -y install tar
+ yum -y --nogpgcheck install wget tar && \
+ yum clean all
 
 # Obtain, verify, and install Java via rpm
 RUN wget -q -O /opt/${JAVA_RPM} --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/${JAVA_BUILD}/${JAVA_DL_HASH}/${JAVA_RPM} && \
@@ -46,19 +46,20 @@ RUN wget -q -O /opt/${TOMCAT_TARBALL} https://downloads.apache.org/tomcat/tomcat
     tar -xvf ${TOMCAT_TARBALL} && \
     rm apache-tomcat*.tar.gz && \
     mv apache-tomcat* ${CATALINA_HOME} && \
-    chmod +x ${CATALINA_HOME}/bin/*sh
+    chmod +x ${CATALINA_HOME}/bin/*sh && \
+    # Make a directory for some personal Tomcat scripts
+    mkdir ${CATALINA_HOME}/scripts/ && \
+    # Create Apache Tomcat user
+    groupadd -r tomcat && \
+    useradd -g tomcat -d ${CATALINA_HOME} -s /sbin/nologin  -c "Tomcat user" tomcat && \
+    chown -R tomcat:tomcat ${CATALINA_HOME} && \
+    # Disable ctrl+alt+del burst action to prevent a security vulnerability from being an issue.
+    echo CtrlAltDelBurstAction=none >> /etc/systemd/system.conf
 
 # Create Apache Tomcat admin user using script
-COPY /scripts ${CATALINA_HOME}/scripts
-ADD create_admin_user.sh $CATALINA_HOME/scripts/create_admin_user.sh
-ADD tomcat.sh $CATALINA_HOME/scripts/tomcat.sh
-RUN chmod +x $CATALINA_HOME/scripts/*.sh
-
-# Create Apache Tomcat user
-RUN groupadd -r tomcat && \
- useradd -g tomcat -d ${CATALINA_HOME} -s /sbin/nologin  -c "Tomcat user" tomcat && \
- chown -R tomcat:tomcat ${CATALINA_HOME} && \
- echo CtrlAltDelBurstAction=none >> /etc/systemd/system.conf
+ADD /scripts/create_admin_user.sh /tomcat/scripts/create_admin_user.sh
+ADD /scripts/tomcat.sh /tomcat/scripts/tomcat.sh
+RUN chmod +x /tomcat/scripts/*.sh
 
 WORKDIR /opt/tomcat
 
