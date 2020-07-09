@@ -8,7 +8,7 @@ FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
 LABEL name="Apache Tomcat" \
       maintainer="Beth Gray <egray@corgidev.com>" \
       vendor="The Apache Software Foundation" \
-      version="10.0.0-M1" \
+      version="10.0.0-M7" \
       release="10" \
       summary="Apache Tomcat container" \
       description="This is an Apache Tomcat container built on a Red Hat UBI8.1 base. Apache Tomcat is an open-source implementation of the Java Servlet, JavaServer Pages, Java Expression Language and WebSocket technologies."
@@ -23,9 +23,9 @@ ENV JAVA_DL_HASH 664493ef4a6946b186ff29eb326336a2
 ENV JAVA_RPM jdk-${JAVA_VERSION}_linux-x64_bin.rpm
 ENV JAVA_SHA256 36A7DF03CAC6EF62933B59B63C045D65351865421A9133D43CEB83D683A2BDFF
 ENV TOMCAT_MAJOR 10
-ENV TOMCAT_VERSION 10.0.0-M1
+ENV TOMCAT_VERSION 10.0.0-M7
 ENV TOMCAT_TARBALL apache-tomcat-${TOMCAT_VERSION}.tar.gz
-ENV TOMCAT_SHA512 a28a99e941564c9ae05b09c035531c1a62057bcf580af0b11c01ae92564c967139ec2510b1338869567e94847b653ee883766efdfcb582fb22c7e365579aa594
+ENV TOMCAT_SHA512 a0fd7472c94285dbb86e1273828ddaa395b8e7e3c2e7d8da901fca7969c0e19fef08452d288500f4ff69bca7ed0d4e3a6382a706dc0328c9e2e9114bd86a84af
 
 WORKDIR /opt/
 
@@ -41,7 +41,7 @@ RUN wget -q -O /opt/${JAVA_RPM} --no-check-certificate --no-cookies --header "Co
     rm ${JAVA_RPM}
 
 # Obtain, verify, and install Apache Tomcat via tar file
-RUN wget -q -O /opt/${TOMCAT_TARBALL} https://downloads.apache.org/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/${TOMCAT_TARBALL} && \
+RUN wget -q -O /opt/${TOMCAT_TARBALL} https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/${TOMCAT_TARBALL} && \
     echo "${TOMCAT_SHA512} ${TOMCAT_TARBALL}" | sha512sum -c - && \
     tar -xvf ${TOMCAT_TARBALL} && \
     rm apache-tomcat*.tar.gz && \
