@@ -27,6 +27,9 @@ Also, if you got some error, you can remove the container with `docker rm ubi8-t
 
 For Mac user, you must share the directory `/opt/tomcat/webapps` and `/opt/tomcat/logs` on Docker > Preferences > File Sharing.
 
+### Run it locally
+`docker run -it --name ubi8-tomcat -p 8080:8080/tcp name:tag`
+
 ## Create Admin User
 
 
